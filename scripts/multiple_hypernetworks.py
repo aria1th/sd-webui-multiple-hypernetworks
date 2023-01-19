@@ -20,6 +20,9 @@ except ImportError:
     from modules.hypernetworks import hypernetwork
     print('Hypernetwork-MonkeyPatch-Extension not found')
     monkeypatch_found = False
+    def hn_forward(self, x):
+        return x + self.linear(x) * (self.multiplier if not self.training else 1)
+    hypernetwork.HypernetworkModule.forward = hn_forward
 
 from modules.processing import (StableDiffusionProcessing,
                                 StableDiffusionProcessingTxt2Img)
